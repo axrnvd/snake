@@ -57,7 +57,7 @@ jobs:
         echo "$HOME/android-sdk/build-tools/34.0.0" >> $GITHUB_PATH  # Добавлен путь к build-tools
 
     - name: Install Buildozer and Kivy
-      run: pip install buildozer kivy
+      run: pip install --upgrade buildozer kivy
 
     - name: Build APK
       run: |        
