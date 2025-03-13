@@ -60,7 +60,9 @@ jobs:
       run: pip install buildozer kivy
 
     - name: Build APK
-      run: |
+      run: |        
+        yes | ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk --licenses
+        ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk "platform-tools" "build-tools;36.0.0" "platforms;android-36"
         buildozer android debug
 
     - name: Upload APK
