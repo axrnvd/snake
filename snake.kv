@@ -1,0 +1,17 @@
+<SnakeGame>:
+    GridLayout:
+        cols: 3
+        rows: 2
+        size: root.size
+        Button:
+            text: '←'
+            on_press: root.direction = (-10, 0) if root.direction != (10, 0) else root.direction
+        Button:
+            text: '↑'
+            on_press: root.direction = (0, 10) if root.direction != (0, -10) else root.direction
+        Button:
+            text: '→'
+            on_press: root.direction = (10, 0) if root.direction != (-10, 0) else root.direction
+        Button:
+            text: '↓'
+            on_press: root.direction = (0, -10) if root.direction != (0, 10) else root.direction
