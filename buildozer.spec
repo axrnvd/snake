@@ -10,4 +10,5 @@ orientation = portrait
 android.api = 34
 android.minapi = 21
 android.ndk = 26.2.11394342
+android.ndk_path = 26.2.11394342
 android.build_tools = 34.0.0
