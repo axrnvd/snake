@@ -47,6 +47,10 @@ jobs:
         yes | ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk --licenses
         ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk "platform-tools" "build-tools;34.0.0" "platforms;android-36"
 
+        # Явная загрузка NDK
+        wget https://dl.google.com/android/repository/android-ndk-r26.2.11394342-linux.zip
+        unzip android-ndk-r26.2.11394342-linux.zip -d ~/.buildozer/android/platform/
+
         # Проверка наличия aidl
         ls ~/android-sdk/build-tools/36.0.0/aidl || echo "Aidl not found!"
 
