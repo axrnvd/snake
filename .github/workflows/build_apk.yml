@@ -38,6 +38,10 @@ jobs:
     - name: Install Cython
       run: pip3 install cython
 
+    - name: Accept all Android licenses
+      run: |
+        yes | ~/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=~/android-sdk
+
     - name: Install Android SDK and Build-Tools
       run: |
         mkdir -p ~/android-sdk
