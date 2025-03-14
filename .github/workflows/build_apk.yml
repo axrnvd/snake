@@ -19,15 +19,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3-pip autoconf libtool pkg-config zlib1g-dev
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          ndk-version: '25.1.8937393'
-          cmake-version: '3.22.1'
-          licenses: |
-            android-sdk-license
-            android-sdk-preview-license
-
       - name: Accept licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
