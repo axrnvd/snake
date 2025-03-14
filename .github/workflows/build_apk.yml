@@ -50,9 +50,8 @@ jobs:
         # Явная загрузка NDK    
         # Создаем директорию, если она не существует
         mkdir -p ~/.buildozer/android/platform
-        wget https://dl.google.com/android/repository/android-ndk-r26c-linux.zip
-        unzip android-ndk-r26c-linux.zip -d ~/.buildozer/android/platform/
-        mv ~/.buildozer/android/platform/android-ndk-r26c ~/.buildozer/android/platform/android-ndk-r26.2.11394342  # Если нужно точное имя
+        wget https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+        unzip android-ndk-r27c-linux.zip -d ~/.buildozer/android/platform/
         
         # Проверка наличия aidl
         ls ~/android-sdk/build-tools/36.0.0/aidl || echo "Aidl not found!"
