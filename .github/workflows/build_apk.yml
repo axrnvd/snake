@@ -65,12 +65,10 @@ jobs:
     - name: Install Buildozer and Kivy
       run: pip install --upgrade buildozer kivy
 
-    - name: Accept all Android licenses
-      run: yes | sdkmanager --licenses
-
     - name: Build APK
       run: |        
-         buildozer android debug 
+         buildozer android debug
+         yes | sdkmanager --licenses
          
     - name: Upload APK
       uses: actions/upload-artifact@v4
