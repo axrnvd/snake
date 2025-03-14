@@ -66,8 +66,7 @@ jobs:
       run: pip install --upgrade buildozer kivy
 
     - name: Accept all Android licenses
-      run: |
-        yes | ~/android-sdk/cmdline-tools/bin/sdkmanager --licenses --sdk_root=~/android-sdk
+      run: yes | sdkmanager --licenses
 
     - name: Build APK
       run: |        
