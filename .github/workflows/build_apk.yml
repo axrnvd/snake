@@ -1,13 +1,9 @@
-name: Android Build
+name: Android CI
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+on: [push, pull_request]
 
 jobs:
-  build-android:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -18,31 +14,30 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install Buildozer and dependencies
+      - name: Install Buildozer dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip autoconf libtool pkg-config zlib1g-dev
-          pip install buildozer
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android-sdk@v2
+        uses: google-github-actions/setup-android-sdk@v1
         with:
-          packages: |
-            platforms;android-34
-            build-tools;34.0.0
-            platform-tools
-            emulator
+          ndk-version: '25.1.8937393'
+          cmake-version: '3.22.1'
+          licenses: |
+            android-sdk-license
+            android-sdk-preview-license
 
-      - name: Accept Android licenses
+      - name: Accept licenses
         run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
 
-      - name: Build APK with Buildozer
+      - name: Build APK
         run: |
-          buildozer android clean
+          pip install buildozer
           buildozer android debug
 
       - name: Upload APK
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: app-debug
           path: bin/*.apk
