@@ -45,7 +45,7 @@ jobs:
         wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
         unzip commandlinetools-linux-9477386_latest.zip
         yes | ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk --licenses
-        ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk "platform-tools" "build-tools;34.0.0" "platforms;android-36"
+        ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk "platform-tools" "build-tools;36.0.0" "platforms;android-36"
 
         # Явная загрузка NDK    
         # Создаем директорию, если она не существует
@@ -60,7 +60,7 @@ jobs:
       run: |
         echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
         echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
-        echo "$HOME/android-sdk/build-tools/34.0.0" >> $GITHUB_PATH  # Добавлен путь к build-tools
+        echo "$HOME/android-sdk/build-tools/36.0.0" >> $GITHUB_PATH  # Добавлен путь к build-tools
 
     - name: Install Buildozer and Kivy
       run: pip install --upgrade buildozer kivy
