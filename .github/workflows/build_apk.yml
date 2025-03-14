@@ -24,6 +24,14 @@ jobs:
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
+
+      - name: Cache Android SDK
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.android
+            $ANDROID_HOME
+          key: ${{ runner.os }}-android-${{ hashFiles('**/buildozer.spec') }}
         
       - name: Build APK
         run: |
