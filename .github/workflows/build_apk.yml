@@ -56,11 +56,6 @@ jobs:
         unzip android-ndk-r26c-linux.zip -d ~/.buildozer/android/platform/
         mv ~/.buildozer/android/platform/android-ndk-r26c ~/.buildozer/android/platform/android-ndk-r26.2.11394342
 
-    - name: Clean builds
-      run: |
-        buildozer android clean
-        rm -rf .buildozer
-
     - name: Build APK
       run: |
         buildozer android debug
