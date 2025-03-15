@@ -32,7 +32,6 @@ jobs:
         uses: android-actions/setup-android@v3
         with:
           packages: 'platforms;build-tools;platform-tools'
-          ndk-version: 27
 
       - name: Build APK
         run: |
