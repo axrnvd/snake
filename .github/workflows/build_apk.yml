@@ -1,48 +1,79 @@
-name: Android CI
 
-on: [push, pull_request]
+name: Build APK
+
+on:
+  push:
+    branches: [main]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
-      - name: Install Buildozer dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y python3-pip autoconf libtool pkg-config zlib1g-dev
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+            python3-pip \
+            python3-dev \
+            autoconf \
+            libtool \
+            pkg-config \
+            zlib1g-dev \
+            libncurses5-dev \
+            libncursesw5-dev \
+            libtinfo6 \
+            cmake \
+            libffi-dev \
+            git \
+            unzip \
+            openjdk-11-jdk
 
-      - name: Accept licenses
-        run: yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses
+    - name: Install Cython
+      run: pip3 install cython
 
-      - name: Pre-accept Android licenses
-        run: |
-          mkdir -p ~/.android/licenses
-          echo "d56f5187479451eabf01fb78af6dfcb131a6481e" > ~/.android/licenses/android-sdk-license
-          echo "84831b9409646a918e30573bab4c9c91346d8abd" > ~/.android/licenses/android-sdk-preview-license
+    - name: Install Android SDK and Build-Tools
+      run: |
+        mkdir -p ~/android-sdk
+        cd ~/android-sdk
+        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+        unzip commandlinetools-linux-9477386_latest.zip
+        yes | ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk --licenses
+        ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk "platform-tools" "build-tools;36.0.0" "platforms;android-36"
 
-      - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
-        with:
-          packages: |
-              'platforms;android-36'
-              'build-tools;36.0.0'  # Важно: версия должна быть явно указана
-              'platform-tools'
+        # Явная загрузка NDK    
+        # Создаем директорию, если она не существует
+        mkdir -p ~/.buildozer/android/platform
+        wget https://dl.google.com/android/repository/android-ndk-r27c-linux.zip
+        unzip android-ndk-r27c-linux.zip -d ~/.buildozer/android/platform/
+        
+        # Проверка наличия aidl
+        ls ~/android-sdk/build-tools/36.0.0/aidl || echo "Aidl not found!"
 
-      - name: Build APK
-        run: |
-          pip install cython buildozer
-          buildozer android debug
+    - name: Set environment variables
+      run: |
+        echo "ANDROID_HOME=$HOME/android-sdk" >> $GITHUB_ENV
+        echo "$HOME/android-sdk/platform-tools" >> $GITHUB_PATH
+        echo "$HOME/android-sdk/build-tools/36.0.0" >> $GITHUB_PATH  # Добавлен путь к build-tools
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-debug
-          path: bin/*.apk
+    - name: Install Buildozer and Kivy
+      run: pip install --upgrade buildozer kivy
+
+    - name: Build APK
+      run: |        
+         buildozer android debug 
+         yes | ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk --licenses
+         ./cmdline-tools/bin/sdkmanager --sdk_root=~/android-sdk "platform-tools" "build-tools;36.0.0" "platforms;android-36"
+         
+    - name: Upload APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: snake.apk
+        path: bin/*.apk
